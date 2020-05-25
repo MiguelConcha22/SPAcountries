@@ -1,0 +1,17 @@
+query Country() {
+  Country {
+    _id
+    name
+    nativeName
+    subregion {
+      name
+    }
+    currencies {
+      name
+      symbol
+    }
+    flag {
+      svgFile
+    }
+  }
+}

@@ -1,9 +1,12 @@
 <template>
   <v-app>
-    <SearchBar v-on:filter="filterByRegion"/>
+    <SearchBar
+      v-bind:subregions="Subregion"
+      v-on:filter="filterByRegion"
+    />
     <v-content>
       <Countries
-        v-bind:countries="filteredCountries.length > 0 ? filteredCountries : countries"
+        v-bind:countries="filteredCountries.length > 0 ? filteredCountries : Country"
       />
     </v-content>
   </v-app>
@@ -12,6 +15,7 @@
 <script>
 import SearchBar from './components/SearchBar';
 import Countries from './components/Countries';
+import gql from 'graphql-tag';
 
 export default {
   name: 'App',
@@ -20,83 +24,53 @@ export default {
     SearchBar,
     Countries,
   },
+  apollo: {
+    Country: gql`
+      query {
+        Country {
+          _id
+          name
+          nativeName
+          subregion {
+            name
+          }
+          currencies {
+            name
+            symbol
+          }
+          flag {
+            svgFile
+          }
+        }
+      }
+    `,
+    Subregion: gql`
+      query {
+        Subregion {
+          name
+        }
+      }
+    `,
+  },
 
   data: () => ({
-    countries: [
-      {
-        _id: 3,
-        name: 'Afghanistan',
-        nativeName: 'افغانستان',
-        subregion: {
-          name: 'Southern Asia',
-          region: {
-            name: 'Asia',
-          },
-        },
-        currencies: [
-          {
-            name: 'Afghan afghani',
-            symbol: '؋',
-          },
-        ],
-        flag: {
-          emoji: '🇦🇫',
-          emojiUnicode: 'U+1F1E6 U+1F1EB',
-          svgFile: 'https://restcountries.eu/data/afg.svg',
-        },
-      },
-      {
-        _id: 27,
-        name: 'Åland Islands',
-        nativeName: 'Åland',
-        subregion: {
-          name: 'Northern Europe',
-          region: {
-            name: 'Europe',
-          },
-        },
-        currencies: [
-          {
-            name: 'Euro',
-            symbol: '€',
-          },
-        ],
-        flag: {
-          emoji: '🇦🇽',
-          emojiUnicode: 'U+1F1E6 U+1F1FD',
-          svgFile: 'https://restcountries.eu/data/ala.svg',
-        },
-      },
-      {
-        _id: 51,
-        name: 'Albania',
-        nativeName: 'Shqipëria',
-        subregion: {
-          name: 'Southern Europe',
-          region: {
-            name: 'Europe',
-          },
-        },
-        currencies: [
-          {
-            name: 'Albanian lek',
-            symbol: 'L',
-          },
-        ],
-        flag: {
-          emoji: '🇦🇱',
-          emojiUnicode: 'U+1F1E6 U+1F1F1',
-          svgFile: 'https://restcountries.eu/data/alb.svg',
-        },
-      },
-    ],
     filteredCountries: [],
   }),
 
   methods: {
     filterByRegion(selectedRegion){
-      this.filteredCountries = this.countries.filter(
-        country => country.subregion.name === selectedRegion
+      this.filteredCountries = this.Country.filter(country =>
+        {
+          if ('subregion' in country && country.subregion !== null) {
+            if ('name' in country['subregion'] && country.subregion.name !== null){
+              return country.subregion.name === selectedRegion;
+            } else {
+              return false;
+            }
+          } else {
+            return false;
+          }
+        }
       );
     },
   },
