@@ -1,6 +1,17 @@
 <template>
-  <v-container>
+  <v-card
+    class="mx-auto"
+    max-width="300px"
+  >
     <v-list>
+      <v-toolbar
+        color="black"
+        dark
+      >
+        <v-spacer></v-spacer>
+        <v-toolbar-title>Countries</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
       <v-list-item
         three-line
         v-for="country in countries" :key="country._id"
@@ -15,85 +26,27 @@
           <v-list-item-subtitle>
             {{ country.nativeName }}
           </v-list-item-subtitle>
+          <v-list-item-subtitle>
+            <v-chip
+              color="secondary"
+              x-small
+              v-for="currency in country.currencies"
+              :key="currency.name">
+              {{ currency.name }} ({{currency.symbol}})
+            </v-chip>
+          </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
   export default {
     name: 'Countries',
+    props: ["countries"],
 
     data: () => ({
-      countries: [
-        {
-          _id: 3,
-          name: 'Afghanistan',
-          nativeName: 'افغانستان',
-          subregion: {
-            name: 'Southern Asia',
-            region: {
-              name: 'Asia',
-            },
-          },
-          currencies: [
-            {
-              name: 'Afghan afghani',
-              symbol: '؋',
-            },
-          ],
-          flag: {
-            emoji: '🇦🇫',
-            emojiUnicode: 'U+1F1E6 U+1F1EB',
-            svgFile: 'https://restcountries.eu/data/afg.svg',
-          },
-        },
-        {
-          _id: 27,
-          name: 'Åland Islands',
-          nativeName: 'Åland',
-          subregion: {
-            name: 'Northern Europe',
-            region: {
-              name: 'Europe',
-            },
-          },
-          currencies: [
-            {
-              name: 'Euro',
-              symbol: '€',
-            },
-          ],
-          flag: {
-            emoji: '🇦🇽',
-            emojiUnicode: 'U+1F1E6 U+1F1FD',
-            svgFile: 'https://restcountries.eu/data/ala.svg',
-          },
-        },
-        {
-          _id: 51,
-          name: 'Albania',
-          nativeName: 'Shqipëria',
-          subregion: {
-            name: 'Southern Europe',
-            region: {
-              name: 'Europe',
-            },
-          },
-          currencies: [
-            {
-              name: 'Albanian lek',
-              symbol: 'L',
-            },
-          ],
-          flag: {
-            emoji: '🇦🇱',
-            emojiUnicode: 'U+1F1E6 U+1F1F1',
-            svgFile: 'https://restcountries.eu/data/alb.svg',
-          },
-        },
-      ],
     }),
   }
 </script>
