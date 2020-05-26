@@ -40,20 +40,6 @@
 
     data: () => ({
       selectedRegion: '',
-      // subregions: [
-      //   {
-      //     _id: 9,
-      //     name: 'Southern Asia',
-      //   },
-      //   {
-      //     _id: 35,
-      //     name: 'Northern Europe',
-      //   },
-      //   {
-      //     _id: 59,
-      //     name: 'Southern Europe',
-      //   },
-      // ],
     }),
 
     methods: {
